@@ -177,6 +177,25 @@ if __name__ == '__main__':
             set_reminder_time(str(result), c.message.message_id)
 
 
+    @bot.message_handler(commands=['clear'])
+    def clear_all(message):
+        conn = get_connection()
+        c = conn.cursor()
+        try:
+            c.execute(f"delete from remind")
+            logger.info('Trying to delete all tuples in reminder table')
+            if c.rowcount != 0:
+                bot.send_message(message.chat.id, f'Все напоминания удалены')
+                logger.info("Successfully delete all tuples in reminder table")
+                conn.commit()
+        except Exception as e:
+            logger.error(e)
+            bot.send_message(message.chat.id, f'Что-то пошло не так - {e}')
+        finally:
+            c.close()
+            conn.close()
+
+
     @bot.message_handler()
     def delete_reminder(message):
         print('Hi from delete_reminder!')
@@ -200,6 +219,8 @@ if __name__ == '__main__':
             finally:
                 c.close()
                 conn.close()
+
+                
 
 
     bot.polling(none_stop=True)
