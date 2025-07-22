@@ -8,28 +8,35 @@ from datetime import datetime, timezone, timedelta
 import datetime
 from telebot.types import ReplyKeyboardRemove, CallbackQuery
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
+import os
 
-file_handler = FileHandler("reminder.log")
+log_dir = '/var/log/reminder_log'
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+
+file_handler = FileHandler("/var/log/reminder_log/reminder.log", mode='a')
 console = StreamHandler()
 console.setLevel(ERROR)
 file_handler.setLevel(DEBUG)
-basicConfig(level='INFO', filename='reminder.log',
+basicConfig(level='INFO', filename='/var/log/reminder_log/reminder.log',
             format='%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]',
-            datefmt='%d/%m/%Y %I:%M:%S', filemode='w')
-form = '%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]'
+            datefmt='%d/%m/%Y %I:%M:%S', filemode='a')
+#form = '%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]'
 # basicConfig(level='DEBUG', format=form,
 #             datefmt='%d/%m/%Y %I:%M:%S', filename='reminder.log', filemode='w', encoding='utf-8')
 logger = getLogger(__name__)
 
 getLogger('urllib3').setLevel('ERROR')
 logger.addHandler(console)
+logger.addHandler(file_handler)
 
 
 # logger.addHandler(file_handler)
 
 def get_connection():
     connection = sqlite3.connect('bot_db')
-    logger.info('Connection get!')
+    #logger.info('Connection get!')
     return connection
 
 
