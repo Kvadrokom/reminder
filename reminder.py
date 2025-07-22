@@ -21,7 +21,7 @@ console.setLevel(ERROR)
 file_handler.setLevel(DEBUG)
 basicConfig(level='INFO', filename='/var/log/reminder_log/reminder.log',
             format='%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]',
-            datefmt='%d/%m/%Y %I:%M:%S', filemode='a')
+            datefmt='%d/%m/%Y %H:%M:%S', filemode='a')
 #form = '%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]'
 # basicConfig(level='DEBUG', format=form,
 #             datefmt='%d/%m/%Y %I:%M:%S', filename='reminder.log', filemode='w', encoding='utf-8')
