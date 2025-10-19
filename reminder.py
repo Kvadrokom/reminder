@@ -226,6 +226,25 @@ if __name__ == '__main__':
             finally:
                 c.close()
                 conn.close()
+        elif 'getall reminder':
+            conn = get_connection()
+            c = conn.cursor()
+            try:
+                c.execute(f"select * from remind")
+                logger.info('Getting all info from reminder')
+                if c.rowcount != 0:
+                    rows = c.fetchall()
+                    for row in rows:
+                        bot.send_message(message.chat.id, f'row')
+                        logger.info("row")
+                else:
+                    bot.send_message(message.chat.id, f'таблица пуста')
+                    logger.info('the table remind is empty')
+            except Exception as e:
+                logger.error(e)
+            finally:
+                c.close()
+                conn.close()
 
                 
 
