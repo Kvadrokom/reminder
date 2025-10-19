@@ -226,20 +226,41 @@ if __name__ == '__main__':
             finally:
                 c.close()
                 conn.close()
-        elif 'getall reminder':
+        elif 'getall reminder' in message.text.lower():
             conn = get_connection()
             c = conn.cursor()
             try:
                 c.execute(f"select * from remind")
                 logger.info('Getting all info from reminder')
-                if c.rowcount != 0:
-                    rows = c.fetchall()
+                rows = c.fetchall()
+                if rows:
                     for row in rows:
-                        bot.send_message(message.chat.id, f'row')
-                        logger.info("row")
+                        row = list(map(str, row))
+                        bot.send_message(message.chat.id,  " ".join(row))
+                        logger.info(row)
                 else:
                     bot.send_message(message.chat.id, f'таблица пуста')
                     logger.info('the table remind is empty')
+            except Exception as e:
+                logger.error(e)
+            finally:
+                c.close()
+                conn.close()
+        elif 'getall user_message' in message.text.lower():
+            conn = get_connection()
+            c = conn.cursor()
+            try:
+                c.execute(f"select * from user_message")
+                logger.info('Getting all info from user_message')
+                rows = c.fetchall()
+                if rows:
+                    for row in rows:
+                        row = list(map(str, row))
+                        bot.send_message(message.chat.id,  " ".join(row))
+                        logger.info(row)
+                else:
+                    bot.send_message(message.chat.id, f'таблица user_message пуста')
+                    logger.info('the table user_message is empty')
             except Exception as e:
                 logger.error(e)
             finally:
