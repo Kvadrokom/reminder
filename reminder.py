@@ -76,6 +76,12 @@ def init_db(force: bool = False):
                            period      TEXT
                        )
                    ''')
+    c.execute('''
+                       create table if not exists stop (
+                           id          integer primary key,
+                           stop      TEXT
+                       )
+                   ''')
     c.close()
     conn.close()
 
@@ -285,8 +291,19 @@ if __name__ == '__main__':
             finally:
                 c.close()
                 conn.close()
+        elif 'stop' in message.text.lower():
+            conn = get_connection()
+            c = conn.cursor()
+            try:
+                logger.info('Stopping water count info')
+                c.execute('insert into stop ( text) values (?)', message.text.lower())
+                logger.info('Successfully insert stop word')
+            except Exception as e:
+                logger.error(e)
+            finally:
+                c.close()
+                conn.close()
 
-                
 
 
     bot.polling(none_stop=True)
