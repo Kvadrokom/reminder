@@ -38,9 +38,14 @@ def check_stop():
 def clear_stop_table():
     conn = get_connection()
     c = conn.cursor()
-    c.execute('Delete FROM stop')
-    c.close()
-    conn.close()
+    try:
+        c.execute('Delete FROM stop')
+        bot.send_message(chat_id, "Остановлено напоминание для Rеm - счетчики")
+    except Exception as e:
+        bot.send_message(chat_id, f"Error - {e}")
+    finally:
+        c.close()
+        conn.close()
 
 if __name__ == '__main__':
     while True:
