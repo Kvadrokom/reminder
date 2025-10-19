@@ -266,6 +266,25 @@ if __name__ == '__main__':
             finally:
                 c.close()
                 conn.close()
+        elif 'getall tables' in message.text.lower():
+            conn = get_connection()
+            c = conn.cursor()
+            try:
+                c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                logger.info('Getting all tables from db')
+                rows = c.fetchall()
+                if rows:
+                    for row in rows:
+                        bot.send_message(message.chat.id,  row)
+                        logger.info(row)
+                else:
+                    bot.send_message(message.chat.id, f'В БД нет таблиц')
+                    logger.info('The DB is empty')
+            except Exception as e:
+                logger.error(e)
+            finally:
+                c.close()
+                conn.close()
 
                 
 
