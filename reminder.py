@@ -296,7 +296,7 @@ if __name__ == '__main__':
             c = conn.cursor()
             try:
                 logger.info('Stopping water count info')
-                c.execute('insert into stop ( text) values (?)', message.text.lower())
+                c.execute('insert into stop(stop) values() (?)', message.text.lower())
                 logger.info('Successfully insert stop word')
             except Exception as e:
                 logger.error(e)
