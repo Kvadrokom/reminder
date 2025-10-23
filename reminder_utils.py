@@ -2,6 +2,7 @@ from datetime import datetime
 import datetime
 from reminder import get_connection, bot
 import time
+from reminder import logger
 
 
 
@@ -29,12 +30,17 @@ def check_stop():
     c = conn.cursor()
     c.execute('SELECT * FROM stop')
     data = c.fetchall()
+    try:
+      if data:
+        bot.send_message(chat_id, data)
+    except Exception as e:
+      logger.error(e)
     c.close()
     conn.close()
     if data:
         return True
-    
-    
+
+
 def clear_stop_table():
     conn = get_connection()
     c = conn.cursor()
@@ -57,10 +63,11 @@ if __name__ == '__main__':
             for el in res:
                 bot.send_message(el[2], f"Напоминание для {el[3]} - {el[4]}")
             time.sleep(1800)
-        if now_day == 19 and not check_stop:
+        if now_day == 22 and not check_stop:
             bot.send_message(chat_id, "Напоминание для Rem - счетчики")
             time.sleep(1800)
         else:
             time.sleep(10)
-        if now_day != 19 and  check_stop:
+        if now_day != 22 and  check_stop:
             clear_stop_table
+            bot.send_message(chat_id, "Таблица стоп очищена")

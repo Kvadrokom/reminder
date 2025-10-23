@@ -1,4 +1,4 @@
-from telebot_token import token
+from telegrambot.telebot_token import token
 from logging import *
 import sqlite3
 import time
@@ -10,7 +10,7 @@ from telebot.types import ReplyKeyboardRemove, CallbackQuery
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 import os
 
-log_dir = '/var/log/reminder_log'
+log_dir = '/var/log/reminder_log/reminder_log'
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
@@ -295,8 +295,8 @@ if __name__ == '__main__':
             conn = get_connection()
             c = conn.cursor()
             try:
-                logger.info('Stopping water count info')
-                c.execute('insert into stop(stop) values() (?)', message.text.lower())
+                logger.info('Stopping water meters info')
+                c.execute('insert into stop (stop) values (?)', (message.text.lower(),))
                 logger.info('Successfully insert stop word')
             except Exception as e:
                 logger.error(e)
