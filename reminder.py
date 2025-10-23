@@ -10,7 +10,7 @@ from telebot.types import ReplyKeyboardRemove, CallbackQuery
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 import os
 
-log_dir = '/reminder_log'
+log_dir = '/var/log/reminder_log'
 log = "reminder.log"
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
