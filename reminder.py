@@ -10,12 +10,13 @@ from telebot.types import ReplyKeyboardRemove, CallbackQuery
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 import os
 
-log_dir = '/var/log/reminder_log/reminder_log'
+log_dir = '/var/log/reminder_log'
+log = "reminder.log"
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
 
-file_handler = FileHandler("/var/log/reminder_log/reminder.log", mode='a')
+file_handler = FileHandler(f"{log_dir}/{log}", mode='a')
 console = StreamHandler()
 console.setLevel(ERROR)
 file_handler.setLevel(DEBUG)
