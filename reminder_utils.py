@@ -61,16 +61,22 @@ if __name__ == '__main__':
         res = check_reminders()
         time_now = int(str(datetime.datetime.now().time()).split(':')[0])
         check_stop = check_stop()
-        logger.debug(f"Проверена таблица stop. Результат - {check_stop}")
-        if res and time_now >= 9 and time_now <= 22:
-            for el in res:
-                bot.send_message(el[2], f"Напоминание для {el[3]} - {el[4]}")
-            time.sleep(time_to_sleep)
-        if now_day == count_day and not check_stop:
-            bot.send_message(chat_id, "Напоминание для Rem - счетчики")
-            time.sleep(time_to_sleep)
-        else:
-            time.sleep(10)
-        if now_day != count_day and  check_stop:
-            clear_stop_table
-            bot.send_message(chat_id, "Таблица стоп очищена")
+        try:
+            logger.debug(f"Проверена таблица stop. Результат - {check_stop}")
+        except Exception as e:
+            logger.error(e)
+        try:
+            if res and time_now >= 9 and time_now <= 22:
+                for el in res:
+                    bot.send_message(el[2], f"Напоминание для {el[3]} - {el[4]}")
+                time.sleep(time_to_sleep)
+            if now_day == count_day and not check_stop:
+                bot.send_message(chat_id, "Напоминание для Rem - счетчики")
+                time.sleep(time_to_sleep)
+            else:
+                time.sleep(10)
+            if now_day != count_day and  check_stop:
+                clear_stop_table
+                bot.send_message(chat_id, "Таблица стоп очищена")
+        except Exception as e:
+            logger.error(e)
