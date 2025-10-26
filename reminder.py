@@ -296,9 +296,13 @@ if __name__ == '__main__':
             conn = get_connection()
             c = conn.cursor()
             try:
-                logger.info('Stopping water meters info')
+                logger.info(f'Stopping water meters info - {message.text.lower()}')
                 c.execute('insert into stop (stop) values (?)', (message.text.lower(),))
-                logger.info('Successfully insert stop word')
+                data = c.fetchall
+                if data:
+                    logger.info('Successfully insert stop word')
+                else:
+                    logger.info(f"Не удалось записать в таблицу стоп  data = {data}")
             except Exception as e:
                 logger.error(e)
             finally:

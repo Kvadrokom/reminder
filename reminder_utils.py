@@ -8,8 +8,8 @@ from bot_logger import setup_logger
 
 chat_id = 1838289390
 log_dir = '/var/log/'
-log_file = "telebot.log"
-logger = setup_logger(log_dir, log_dir)
+log_file = "reminder.log"
+logger = setup_logger(log_dir, log_file)
 
 
 def check_reminders():
