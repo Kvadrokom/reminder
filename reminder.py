@@ -16,7 +16,7 @@ if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
 
-file_handler = FileHandler(f"{log_dir}/{log}", mode='a')
+file_handler = FileHandler(f"{log_dir}/{log}", mode='a', encoding='utf-8')
 console = StreamHandler()
 console.setLevel(ERROR)
 file_handler.setLevel(DEBUG)

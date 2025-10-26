@@ -2,11 +2,14 @@ from datetime import datetime
 import datetime
 from reminder import get_connection, bot
 import time
-from reminder import logger
+from bot_logger import setup_logger
 
 
 
 chat_id = 1838289390
+log_dir = '/var/log/'
+log_file = "telebot.log"
+logger = setup_logger(log_dir, log_dir)
 
 
 def check_reminders():
