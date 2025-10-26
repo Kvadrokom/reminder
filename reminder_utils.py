@@ -28,33 +28,38 @@ def check_reminders():
     return  result
 
 
-def check_stop():
+def check_stop_table():
     conn = get_connection()
     c = conn.cursor()
     c.execute('SELECT * FROM stop')
     data = c.fetchall()
-    try:
-      if data:
-        bot.send_message(chat_id, data)
-    except Exception as e:
-      logger.error(e)
     c.close()
     conn.close()
+    
     if data:
+        logger.debug(f"Таблица стоп не пуста. Данные: {data}")
         return True
+    else:
+        logger.debug("Таблица стоп пуста")
+        return False
+        
 
 
 def clear_stop_table():
     conn = get_connection()
     c = conn.cursor()
     try:
-        c.execute('Delete FROM stop')
-        bot.send_message(chat_id, "Остановлено напоминание для Rеm - счетчики")
+        c.execute('DELETE FROM stop')
+        conn.commit()
+        logger.info("Таблица стоп очищена")
+        # Убрал отправку сообщения, чтобы не спамить
     except Exception as e:
-        bot.send_message(chat_id, f"Error - {e}")
+        logger.error(f"Ошибка при очистке таблицы stop: {e}")
+        bot.send_message(chat_id, f"Ошибка при очистке стоп-слов: {e}")
     finally:
         c.close()
         conn.close()
+
 
 if __name__ == '__main__':
     while True:
@@ -63,23 +68,33 @@ if __name__ == '__main__':
         now_day = datetime.datetime.now().day
         res = check_reminders()
         time_now = int(str(datetime.datetime.now().time()).split(':')[0])
-        check_stop = check_stop()
+        
+        # Получаем статус стоп-слова
+        has_stop = check_stop_table()
+        
         try:
-            logger.debug(f"Проверена таблица stop. Результат - {check_stop}")
+            logger.debug(f"Проверена таблица stop. Результат - {has_stop}")
         except Exception as e:
             logger.error(e)
+            
         try:
+            # Регулярные напоминания (только если нет стоп-слова)
             if res and time_now >= 9 and time_now <= 22:
                 for el in res:
                     bot.send_message(el[2], f"Напоминание для {el[3]} - {el[4]}")
                 time.sleep(time_to_sleep)
-            if now_day == count_day and not check_stop:
+                
+            # Напоминание для счетчиков (только если нет стоп-слова и сегодня 23 число)
+            if now_day == count_day:
                 bot.send_message(chat_id, "Напоминание для Rem - счетчики")
                 time.sleep(time_to_sleep)
-            else:
+                
+            # Очищаем таблицу stop когда день изменился И есть стоп-слово
+            if now_day != count_day and has_stop:
+                clear_stop_table()
+                logger.info("Таблица стоп очищена")               
                 time.sleep(10)
-            if now_day != count_day and  check_stop:
-                clear_stop_table
-                bot.send_message(chat_id, "Таблица стоп очищена")
+                
         except Exception as e:
             logger.error(e)
+            time.sleep(10)

@@ -10,7 +10,7 @@ from telebot.types import ReplyKeyboardRemove, CallbackQuery
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 import os
 
-log_dir = '/var/log/reminder_log'
+log_dir = '/var/log/'
 log = "reminder.log"
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
@@ -296,15 +296,16 @@ if __name__ == '__main__':
             conn = get_connection()
             c = conn.cursor()
             try:
-                logger.info(f'Stopping water meters info - {message.text.lower()}')
-                c.execute('insert into stop (stop) values (?)', (message.text.lower(),))
-                data = c.fetchall
-                if data:
-                    logger.info('Successfully insert stop word')
-                else:
-                    logger.info(f"Не удалось записать в таблицу стоп  data = {data}")
+                logger.info(f"Получена команда stop: {message.text.lower()}")
+                # Сначала очищаем таблицу, потом добавляем новую запись
+                c.execute('DELETE FROM stop')
+                c.execute('INSERT INTO stop (stop) VALUES (?)', (message.text.lower(),))
+                conn.commit()
+                logger.info('Stop word successfully added to database')
+                bot.send_message(message.chat.id, "Напоминания остановлены")
             except Exception as e:
-                logger.error(e)
+                logger.error(f"Error adding stop word: {e}")
+                bot.send_message(message.chat.id, "Ошибка при остановке напоминаний")
             finally:
                 c.close()
                 conn.close()
