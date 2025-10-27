@@ -63,7 +63,7 @@ def clear_stop_table():
 
 if __name__ == '__main__':
     while True:
-        count_day = 23
+        count_day = 27
         time_to_sleep = 300
         now_day = datetime.datetime.now().day
         res = check_reminders()
@@ -74,8 +74,10 @@ if __name__ == '__main__':
         
         try:
             logger.debug(f"Проверена таблица stop. Результат - {has_stop}")
+            time.sleep(20)
         except Exception as e:
             logger.error(e)
+            time.sleep(20)
             
         try:
             # Регулярные напоминания (только если нет стоп-слова)
@@ -85,7 +87,7 @@ if __name__ == '__main__':
                 time.sleep(time_to_sleep)
                 
             # Напоминание для счетчиков (только если нет стоп-слова и сегодня 23 число)
-            if now_day == count_day:
+            if now_day == count_day and not has_stop:
                 bot.send_message(chat_id, "Напоминание для Rem - счетчики")
                 time.sleep(time_to_sleep)
                 
@@ -93,8 +95,8 @@ if __name__ == '__main__':
             if now_day != count_day and has_stop:
                 clear_stop_table()
                 logger.info("Таблица стоп очищена")               
-                time.sleep(10)
+                time.sleep(20)
                 
         except Exception as e:
             logger.error(e)
-            time.sleep(10)
+            time.sleep(20)
