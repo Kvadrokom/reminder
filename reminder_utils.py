@@ -9,7 +9,7 @@ from bot_logger import setup_logger
 chat_id = 1838289390
 log_dir = '/var/log/'
 log_file = "reminder.log"
-logger = setup_logger(log_dir, log_file)
+logger = setup_logger(log_dir, log_file, __name__)
 
 
 def check_reminders():
@@ -94,7 +94,7 @@ if __name__ == '__main__':
             # Очищаем таблицу stop когда день изменился И есть стоп-слово
             if now_day != count_day and has_stop:
                 clear_stop_table()
-                logger.info("Таблица стоп очищена")               
+                logger.info("Таблица стоп очищена")
                 time.sleep(20)
                 
         except Exception as e:

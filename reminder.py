@@ -13,7 +13,7 @@ from bot_logger import setup_logger
 
 log_dir = '/var/log/'
 log_file = "reminder.log"
-logger = setup_logger(log_dir, log_file)
+logger = setup_logger(log_dir, log_file, __name__)
 
 def get_connection():
     connection = sqlite3.connect('bot_db')
