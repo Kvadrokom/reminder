@@ -21,7 +21,7 @@ def setup_logger(log_dir='/var/log/reminder_log', log_file="reminder.log", name=
     if logger.handlers:
         return logger
     
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     
     formatter = logging.Formatter(
         '%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]',

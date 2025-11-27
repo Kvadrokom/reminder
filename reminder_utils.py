@@ -63,8 +63,8 @@ def clear_stop_table():
 
 if __name__ == '__main__':
     while True:
-        count_day = 27
-        time_to_sleep = 300
+        count_day = 20
+        time_to_sleep = 1800
         now_day = datetime.datetime.now().day
         res = check_reminders()
         time_now = int(str(datetime.datetime.now().time()).split(':')[0])
