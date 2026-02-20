@@ -182,6 +182,10 @@ if __name__ == '__main__':
                 bot.send_message(message.chat.id, f'Все напоминания удалены')
                 logger.info("Successfully delete all tuples in reminder table")
                 conn.commit()
+            else:
+                bot.send_message(message.chat.id, 'Напоминания отсутствуют')
+                logger.info("Напоминания отсутствуют")
+                conn.commit()
         except Exception as e:
             logger.error(e)
             bot.send_message(message.chat.id, f'Что-то пошло не так - {e}')
